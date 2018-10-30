@@ -1,0 +1,81 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if employee_object.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+{% if employee_object.is_admin %}
+
+    <div class="card mb-3">
+            <div class="card-header bg-dark text-info"><h4>
+              <i class="fas fa-list"></i>&nbsp;Employee List</h4></div>
+      <div class="card-body">
+        <div class="table-responsive">
+                    <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                      <thead>
+                        <tr>
+                          <th>ID</th>
+                          <th>Name</th>
+                          <th>Position</th>
+                          <th>Profile Photo</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          {% for i in employee_object_list %}
+                            <tr>
+                              <td><h5>{{ i.gcc_id }}</h5></td>
+
+                              <td><a href="/emswebext/employeeprofile/{{ i.username }}"
+                                     {% if i.is_active %}
+                                     class="text-success"
+                                     {% else %}
+                                     class="text-danger"
+                                     {% endif %}>
+                                  <h5>{{ i.full_name }}</h5></a></td>
+
+                              <td>
+                                      {% if i.is_admin %}
+                                        Administrator
+                                      {% else %}
+                                        Instructor
+                                      {% endif %}
+                              </td>
+
+                              <td>
+                                    {% if i.profile.profile_photo == null or i.profile.profile_photo == '' %}
+                                        {% if i.profile.gender == 'male' %}
+                                            <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/boyprofile.png' %}">
+                                        {% else %}
+                                            <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/girlprofile.png' %}">
+                                        {% endif %}
+                                    {% else %}
+                                        <img class="profile-img img-rounded" src="{{ i.profile.profile_photo.url }}">
+                                    {% endif %}
+                              </td>
+
+                            </tr>
+                          {% endfor %}
+                      </tbody>
+                    </table>
+        </div>
+
+    </div>
+      </div>
+ <div class="card-footer bg-dark small text-info">Regular Employee View</div>
+
+
+    <br>
+
+{% else %}
+    {% include 'EMS_REST_API/error_404.html' %}
+{% endif %}
+
+
+{% endblock %}
+
+

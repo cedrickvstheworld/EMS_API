@@ -1,0 +1,11 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if session_user.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    {% include 'EMS_REST_API/error_404.html' %}
+{% endblock %}

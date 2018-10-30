@@ -1,0 +1,70 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if employee_object.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if employee_object.is_admin %}
+    <div class="card mb-3">
+            <div class="card-header bg-success"><h4>
+              <i class="fas fa-calendar"></i>&nbsp;
+              Employees' Attendance Logs</h4></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Time-In</th>
+                      <th>Time-Out</th>
+                      <th>Name</th>
+                      <th>ID</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in attendance_logs %}
+                    <tr>
+                      <td>{{ i.time_in }}</td>
+                      <td>{{ i.time_out }}</td>
+                      <td>{{ i.name }}</td>
+                      <td>{{ i.id }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer bg-dark small text-info">Super-User View</div>
+    </div>
+    {% else %}
+    <div class="card mb-3">
+            <div class="card-header bg-success"><h4>
+              <i class="fas fa-calendar"></i>&nbsp;
+              Employees' Attendance Logs</h4></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Time-In</th>
+                      <th>Time-Out</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in attendance_logs %}
+                    <tr>
+                      <td>{{ i.time_in }}</td>
+                      <td>{{ i.time_out }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer bg-dark small text-info">Regular Employee View</div>
+    </div>
+    {% endif %}
+
+{% endblock %}

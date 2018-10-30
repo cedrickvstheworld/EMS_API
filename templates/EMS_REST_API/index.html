@@ -1,0 +1,96 @@
+{% extends 'EMS_REST_API/mainframe.html'  %}
+
+{% block navaddons %}
+{% if employee_object.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class="row">
+    <div class="col-sm-3 text-center">
+        {% if employee_profile.profile_photo == null or employee_profile.profile_photo == '' %}
+            {% if employee_profile.gender == 'male' %}
+                <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/boyprofile.png' %}">
+            {% else %}
+                <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/girlprofile.png' %}">
+            {% endif %}
+        {% else %}
+            <img class="profile-img img-rounded" src="{{ employee_profile.profile_photo.url }}">
+        {% endif %}
+        <br>
+
+    <form method="post" enctype="multipart/form-data" action="{% url 'updatephoto' %}">
+        {% csrf_token %}
+        <br>
+        <h6 class="text-secondary">Change Profile Photo:</h6>
+    <input class="form-control-sm input-length-md text-secondary" type="file" name="picture" required><br><br>
+        <input type="submit" class="btn btn-info" value="Update Profile Photo">
+    </form>
+
+
+    </div>
+
+    <div class="col-sm-9">
+        {% if employee_object %}
+            <h3 class="-heading text-capitalize text-info">{{ employee_object.first_name }} {{ employee_object.middle_name }}
+                {{ employee_object.last_name }}</h3>
+
+            <h5 class="{% if employee_object.is_active %}
+                text-success
+                {% else %}
+                text-danger
+                {% endif %}">
+                <i class="fa fa-circle
+                {% if employee_object.is_active %}
+                text-success
+                {% else %}
+                text-danger
+                {% endif %}
+                "></i>
+                {% if employee_object.is_admin %}
+                &nbsp;Administrator
+                {% else %}
+                 Regular Employee
+                {% endif %}</h5>
+            <h6>{{ gcc_id }}</h6><br>
+
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+                    <h4 class="modal-header text-secondary">Profile Information</h4>
+                    <h5><b>Username:</b> {{ user_object.username }}</h5><br>
+                    <h5><b>Gmail:</b> {{ user_object.email }}</h5><br>
+                    <h5 class="text-capitalize"><b>Contact:</b> {{ employee_profile.contact_number }}</h5><br>
+                    <h5 class="text-capitalize"><b>Address:</b> {{ employee_profile.address }}</h5><br>
+                    <h5 class="text-capitalize"><b>Birthday: </b>{{ employee_profile.birthday }}</h5><br>
+                    <h5 class="text-capitalize"><b>Gender:</b> {{ employee_profile.gender }}</h5><br>
+                    <h5 class="text-capitalize text-info"><b>No. of Days Present:</b>
+                        {{ employee_profile.presences_count }}</h5><br>
+                    <h5 class="text-capitalize text-danger"><b>No. of Days Absent:</b>
+                        {{ employee_profile.absences_count }}</h5><br>
+                    </div>
+
+                    <div class="col-sm-6">
+                    <h4 class="modal-header text-secondary">Job Information</h4>
+                    <h5 class="text-capitalize"><b>Rate:</b> PHP {{ employee_config.rate_per_hour }}/ per hour</h5><br>
+                    <h5 class="text-capitalize"><b>Day-Off: </b>{{ employee_config.non_working_days }}</h5><br>
+                    <h5><b>SSS Number:</b> {{ employee_config.sss_number }}</h5><br>
+                    <h5><b>PHILHEALTH Number:</b> {{ employee_config.philhealth_number }}</h5><br>
+                    <h5><b>PAGIBIG Number:</b> {{ employee_config.pagibig_number }}</h5><br>
+                    <h5><b>TIN:</b> {{ employee_config.tin_number }}</h5><br>
+
+                        {% if employee_object.is_admin %}
+                             <a href="/emswebext/employeeprofile/{{ user_object.username }}" class="btn btn-success">
+                             Update Profile Information</a>
+                        {% endif %}
+
+                    </div>
+
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}

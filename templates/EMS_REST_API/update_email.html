@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+
+{% block branding %}
+<h1 id="site-name"><a href="{% url 'emswebext' %}">EMS WEBEXT</a></h1>
+{% endblock %}
+
+
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}">{% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'index' %}">{% trans 'Home' %}</a>
+&rsaquo; {% trans 'Update Email' %}
+</div>
+{% endblock %}
+
+{% block title %}{{ title }}{% endblock %}
+{% block content_title %}<h1>{{ title }}</h1>{% endblock %}
+{% block content %}
+
+
+
+<form method="post" action="{% url 'updateemail' %}">{% csrf_token %}
+<fieldset class="module aligned">
+    <div class="form-row field-email">
+        <label for="id_email">{% trans 'Email address:' %}</label>
+        <input class="form-control-sm" pattern="[a-zA-Z0-9_]+" name="email" type="text" placeholder="" required>
+        <span>@gmail.com</span>
+    </div>
+    <input type="submit" value="{% trans 'Update my Email' %}">
+</fieldset>
+</form>
+{% if response %}
+    <h1>{{ response }}</h1>
+{% endif %}
+
+
+{% endblock %}

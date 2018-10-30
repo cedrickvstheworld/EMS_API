@@ -1,0 +1,118 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if employee_object.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if employee_object.is_admin %}
+    <div class="card mb-3">
+            <div class="card-header bg-info"><h4>
+              <i class="fas fa-coins"></i>&nbsp;
+              Employees' Salary Reports</h4></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="dataTable-salary-all" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Period</th>
+                      <th>Status</th>
+                      <th>Total Time</th>
+                      <th>Total Over-Time</th>
+                      <th>No. of Days Present</th>
+                      <th>No. of Days Absent</th>
+                      <th>Special Pay</th>
+                      <th>Gross Pay</th>
+                      <th>SSS Contrib.</th>
+                      <th>PHILHEALTH Contrib.</th>
+                      <th>PAGIBIG Contrib.</th>
+                      <th>Tax</th>
+                      <th>Total Deductions</th>
+                      <th>Net Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in salary_logs %}
+                    <tr>
+                      <td>{{ i.gcc_id }}</td>
+                      <td>{{ i.emp_name }}</td>
+                      <td>{{ i.period }}</td>
+                      <td>{{ i.status }}</td>
+                      <td>{{ i.total_time }}</td>
+                      <td>{{ i.total_ot }}</td>
+                      <td>{{ i.days_present }}</td>
+                      <td>{{ i.days_absent }}</td>
+                      <td>{{ i.special_pay }}</td>
+                      <td>{{ i.gross_pay }}</td>
+                      <td>{{ i.sss }}</td>
+                      <td>{{ i.philhealth }}</td>
+                      <td>{{ i.pagibig }}</td>
+                      <td>{{ i.tax }}</td>
+                      <td>{{ i.total_deductions }}</td>
+                      <td>{{ i.net_pay }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer bg-dark small text-info">Super-User View</div>
+    </div>
+    {% else %}
+    <div class="card mb-3">
+            <div class="card-header bg-info"><h4>
+              <i class="fas fa-coins"></i>&nbsp;
+              Employees' Salary Reports</h4></div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-striped" id="dataTable-salary" width="100%" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th>Period</th>
+                      <th>Status</th>
+                      <th>Total Time</th>
+                      <th>Total Over-Time</th>
+                      <th>No. of Days Present</th>
+                      <th>No. of Days Absent</th>
+                      <th>Special Pay</th>
+                      <th>Gross Pay</th>
+                      <th>SSS Contrib.</th>
+                      <th>PHILHEALTH Contrib.</th>
+                      <th>PAGIBIG Contrib.</th>
+                      <th>Tax</th>
+                      <th>Total Deductions</th>
+                      <th>Net Pay</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% for i in salary_logs %}
+                    <tr>
+                      <td>{{ i.period }}</td>
+                      <td>{{ i.status }}</td>
+                      <td>{{ i.total_time }}</td>
+                      <td>{{ i.total_ot }}</td>
+                      <td>{{ i.days_present }}</td>
+                      <td>{{ i.days_absent }}</td>
+                      <td>{{ i.special_pay }}</td>
+                      <td>{{ i.gross_pay }}</td>
+                      <td>{{ i.sss }}</td>
+                      <td>{{ i.philhealth }}</td>
+                      <td>{{ i.pagibig }}</td>
+                      <td>{{ i.tax }}</td>
+                      <td>{{ i.total_deductions }}</td>
+                      <td>{{ i.net_pay }}</td>
+                    </tr>
+                  {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="card-footer bg-dark small text-info">Regular Employee View</div>
+    </div>
+    {% endif %}
+
+{% endblock %}

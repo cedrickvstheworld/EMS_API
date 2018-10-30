@@ -1,0 +1,267 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if session_user.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+
+{% block content %}
+{% load staticfiles %}
+
+{% if session_user.is_admin %}
+    {% if error %}
+        {% include 'EMS_REST_API/error_404.html' %}
+    {% else %}
+        {% load static %}
+    <div class="row">
+    <div class="col-sm-3 text-center">
+        {% if employee_profile.profile_photo == null or employee_profile.profile_photo == '' %}
+            {% if employee_profile.gender == 'male' %}
+                <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/boyprofile.png' %}">
+            {% else %}
+                <img class="profile-img img-rounded" src="{% static 'EMS_REST_API/websitephotos/girlprofile.png' %}">
+            {% endif %}
+        {% else %}
+            <img class="profile-img img-rounded" src="{{ employee_profile.profile_photo.url }}">
+        {% endif %}
+    </div>
+
+    <div class="col-sm-9">
+        {% if employee_object %}
+            <h3 class="-heading text-capitalize text-info">
+                {{ employee_object.first_name }} {{ employee_object.middle_name }} {{ employee_object.last_name }}
+            </h3>
+
+            <h5 class="{% if employee_object.is_active %}
+                text-success
+                {% else %}
+                text-danger
+                {% endif %}">
+                <i class="fa fa-circle
+                {% if employee_object.is_active %}
+                text-success
+                {% else %}
+                text-danger
+                {% endif %}
+                "></i>
+                {% if employee_object.is_admin %}
+                &nbsp;Administrator
+                {% else %}
+                 Regular Employee
+                {% endif %}</h5>
+            <h6>{{ gcc_id }}</h6><br>
+
+    <form id="updateEmployee" method="post" action="{% url 'employeeUpdateWebsite' %}">
+            {% csrf_token %}
+                <div id="employeeUpdate" class="row">
+            <input type="hidden" name="id" id="id" value="{{ employee_object.id }}">
+            <input type="hidden" name="username" id="username" value="{{ username }}">
+
+                    <div class="col-sm-6">
+                    <h4 class="modal-header text-secondary">Profile Information</h4>
+
+                    <h5 class="text-capitalize"><b>First Name:</b><br>
+                        <input type="text" class="letters input-length-md form-control-sm"
+                               name="first_name" id="first_name"
+                               pattern="[a-zA-Z ]+" value="{{ employee_object.first_name }}" required></h5><br>
+
+                    <h5 class="text-capitalize"><b>Middle Name:</b><br>
+                        <input type="text" class="letters input-length-md form-control-sm"
+                               name="middle_name" id="middle_name"
+                               pattern="[a-zA-Z ]+" value="{{ employee_object.middle_name }}" required></h5><br>
+
+                    <h5 class="text-capitalize"><b>Last Name: </b><br>
+                        <input type="text" class="letters input-length-md form-control-sm"
+                               name="last_name" id="last_name"
+                               pattern="[a-zA-Z ]+" value="{{ employee_object.last_name }}" required></h5><br>
+
+                    <h5><b>Gmail:</b><br> {{ user_object.email }}</h5><br>
+
+                    <h5 class="text-capitalize"><b>Contact:</b><br>
+                        <input type="text" class="integers input-length-md form-control-sm"
+                               name="contact_number" id="contact_number"
+                               pattern="^9(?!(000000000))\d{9}$"
+                               value="{{ employee_profile.contact_number }}" required></h5><br>
+
+                    <h5 class="text-capitalize"><b>Address:</b><br>
+                        <input type="text" class="input-length-md form-control-sm" name="address" id="address"
+                               value="{{ employee_profile.address }}" required></h5><br>
+
+                    <h5 class="text-capitalize"><b>Birthday: </b><br>
+                        <input type="date"  value="{{ employee_profile.birthday }}"
+                               class="form-control-sm" name="birthday" id="birthday"></h5><br>
+
+                    <h5 class="text-capitalize"><b>Gender:</b>&nbsp;
+                        {% if employee_profile.gender == 'male' %}
+                        <input type="radio" name="gender" value="male" checked> Male
+                        <input type="radio" name="gender" value="female"> Female<br>
+                        {% else %}
+                        <input type="radio" name="gender" value="male"> Male
+                        <input type="radio" name="gender" value="female" checked> Female<br>
+                        {% endif %}
+                    </h5><br>
+
+
+                    <h5 class="text-capitalize text-info"><b>No. of Days Present:</b>
+                        {{ employee_profile.presences_count }}</h5><br>
+                    <h5 class="text-capitalize text-danger"><b>No. of Days Absent:</b>
+                        {{ employee_profile.absences_count }}</h5><br>
+                    </div>
+
+                    <div class="col-sm-6">
+
+                    <h4 class="modal-header text-secondary">Job Information</h4>
+
+                    <h5 class="text-capitalize"><b>Position:</b><br>
+                        <select class="form-control-sm" name="position">
+
+                            {% if employee_object.is_admin%}
+
+                            <option value="administrator" selected>Administrator</option>
+                            <option value="instructor">Instructor</option>
+
+                            {% else %}
+
+                            <option value="admin">Administrator</option>
+                            <option value="instructor" selected>Instructor</option>
+
+                            {% endif %}
+                        </select>
+                    </h5><br>
+
+                    <h5 class="text-capitalize"><b>Rate:</b><br>
+                        <select class="form-control-sm" name="rate_per_hour">
+
+                            {% if employee_config.rate_per_hour == global_config.level_1_rate %}
+
+                            <option value="{{ global_config.level_1_rate }}" selected>
+                                PHP {{ global_config.level_1_rate }}/ per hour</option>
+                            <option value="{{ global_config.level_2_rate }}">
+                                PHP {{ global_config.level_2_rate }}/ per hour</option>
+                            <option value="{{ global_config.level_3_rate }}">
+                                PHP {{ global_config.level_3_rate }}/ per hour</option>
+
+                            {% elif employee_config.rate_per_hour == global_config.level_2_rate %}
+
+                                <option value="{{ global_config.level_1_rate }}">
+                                    PHP {{ global_config.level_1_rate }}/ per hour</option>
+                                <option value="{{ global_config.level_2_rate }}" selected>
+                                    PHP {{ global_config.level_2_rate }}/ per hour</option>
+                                <option value="{{ global_config.level_3_rate }}">
+                                    PHP {{ global_config.level_3_rate }}/ per hour</option>
+
+                            {% else %}
+
+                                <option value="{{ global_config.level_1_rate }}">
+                                    PHP {{ global_config.level_1_rate }}/ per hour</option>
+                                <option value="{{ global_config.level_2_rate }}">
+                                    PHP {{ global_config.level_2_rate }}/ per hour</option>
+                                <option value="{{ global_config.level_3_rate }}" selected>
+                                    PHP {{ global_config.level_3_rate }}/ per hour</option>
+
+                            {% endif %}
+                        </select>
+                    </h5><br>
+
+                    <h5 class="text-capitalize"><b>Day-Off: </b><br>
+
+                        <input type="checkbox" name="dayoff" value="monday"
+                        {% if 'monday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> monday<br>
+
+                        <input type="checkbox" name="dayoff" value="tuesday"
+                        {% if 'tuesday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> tuesday<br>
+
+                        <input type="checkbox" name="dayoff" value="wednesday"
+                        {% if 'wednesday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> wednesday<br>
+
+                        <input type="checkbox" name="dayoff" value="thursday"
+                        {% if 'thursday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> thurday<br>
+
+                        <input type="checkbox" name="dayoff" value="friday"
+                        {% if 'friday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> friday<br>
+
+                        <input type="checkbox" name="dayoff" value="saturday"
+                        {% if 'saturday' in employee_config.non_working_days %}
+                             checked
+                        {% endif %}> saturday<br>
+                    </h5><br>
+
+                    <h5><b>SSS Number:</b><br>
+                    <input type="text" class="numdash form-control-sm" name="sss_number" id="sss_number"
+                           pattern="^(?!(0000))\d{4}-(?!0000000)\d{7}-(?!0000)\d{4}$"
+                           value="{{ employee_config.sss_number }}" required>
+                    </h5><br>
+
+                    <h5><b>PHILHEALTH Number:</b><br>
+                    <input type="text" class="numdash form-control-sm" name="philhealth_number" id="philhealth_number"
+                           pattern="^(?!(00))\d{2}-(?!(000000000))\d{9}-(?!(0))\d{1}$"
+                               value="{{ employee_config.philhealth_number }}" required>
+                    </h5><br>
+
+                    <h5><b>PAGIBIG Number:</b><br>
+                    <input type="text" class="numdash form-control-sm" name="pagibig_number" id="pagibig_number"
+                           pattern="^(?!(0000))\d{4}-(?!(0000))\d{4}-(?!(0000))\d{4}$"
+                               value="{{ employee_config.pagibig_number }}" required>
+                    </h5><br>
+
+                    <h5><b>TIN:</b><br>
+                    <input type="text" class="numdash form-control-sm" name="tin_number" id="tin_number"
+                           pattern="^(?!(000))\d{3}-(?!(000))\d{3}-(?!(000))\d{3}-(?!(00000))\d{5}$"
+                                value="{{ employee_config.tin_number }}" required>
+                    </h5><br>
+
+                    <h5 class="text-capitalize"><b>Status:</b>&nbsp;
+                        {% if employee_object.is_active %}
+                        <input type="radio" name="status" value="active" checked>
+                            <span class="text-success">Active</span>
+                        <input type="radio" name="status" value="inactive">
+                            <span class="text-danger">Inactive</span><br>
+                        {% else %}
+                        <input type="radio" name="status" value="active"> <span class="text-success">Active</span>
+                        <input type="radio" name="status" value="inactive" checked>
+                            <span class="text-danger">Inactive</span><br>
+                        {% endif %}
+                    </h5><br>
+
+
+
+                            <button type="reset" class="btn btn-info">Undo Changes</button>
+
+                            <button type="submit" id="update" class="btn btn-success">Update Information</button>
+                    <br><br>
+                    {% if update_response %}
+                        {% if update_response == 'ok'%}
+                        <script>
+                            document.write('<div class="alert alert-success">Employee\'s Profile is Updated</div>');
+                        </script>
+                        {% else %}
+                        <script>
+                            document.write('<div class="alert alert-danger">{{ update_response }}</div>');
+                        </script>
+                        {% endif %}
+                    {% endif %}
+
+                    </div>
+
+
+        {% endif %}
+    </div>
+    </form>
+    {% endif %}
+{% else %}
+    {% include 'EMS_REST_API/error_404.html' %}
+{% endif %}
+
+{% endblock %}

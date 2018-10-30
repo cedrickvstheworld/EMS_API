@@ -1,0 +1,186 @@
+{% extends 'EMS_REST_API/frameA.html' %}
+
+{% block content %}
+    {% load staticfiles %}
+
+{# Nav Bar #}
+<nav id="MagicMenu" class="navlanding navbar fixed-top navbar-expand-sm">
+
+        <a href="{% url 'emswebext' %}"><h4 class="navbar-brand text-orange">
+            <i class="fa fa-clock-o"></i>&nbsp;EMS WEBEXT</h4></a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="text-muted">...</span>
+        </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-nav ml-auto">
+            <a class="nav-item btn btn-link text-info text-right" href="{% url 'login_url' %}">
+                <i class="fa fa-sign-in"></i>&nbsp;sign-in</a>
+    </div>
+    </div>
+
+</nav>
+
+{# header block  #}
+<div class="top-bg">
+    <div class="title-block">
+        <h1 class="text-white text-center">Employee Management System<br>
+            Web Extension
+        </h1>
+    </div>
+</div>
+
+{# block 2  #}
+<div class="block-two container">
+<div class="container-fluid">
+    <h1 class="text-center"><b>Management at its Finest</b></h1><br>
+<div class="row">
+    <div class="col-sm-5">
+        <div class="container">
+            <h4 class="text-secondary">
+                EMS WebExt Provides online control over the business'
+                configurations and settings, employee's information
+                and it provides real time transactional logs overview.
+            </h4>
+        </div>
+    </div>
+    <div class="col-sm-7 text-center">
+            <img class="img-rounded"
+                 id="block-two-img" src="{% static 'EMS_REST_API/websitephotos/relax.png' %}">
+    </div>
+</div>
+    <br><br>
+</div>
+</div>
+
+
+{# block 3  #}
+<div class="block-three container">
+<div class="container-fluid">
+    <h1 class="text-left"><b>Access Everywhere</b></h1><br>
+<div class="row">
+    <div class="col-sm-7">
+            <img class="img-fluid img-responsive"
+                 id="block-three-img" src="{% static 'EMS_REST_API/websitephotos/access.png' %}">
+    </div>
+    <div class="col-sm-5">
+        <div class="container">
+            <h4 class="text-secondary">
+                Access and view information you need
+                anywhere with any device.
+            </h4>
+        </div>
+    </div>
+</div>
+    <br><br>
+</div>
+</div>
+
+
+{# block 3  #}
+<div class="block-four container">
+<div class="container-fluid">
+    <h1 class="text-right"><b>Meaningful Reports</b></h1><br>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="container">
+            <h4 class="text-secondary">
+                Information reports which are definitely not useless and are
+                easy enough to be understood by a human.
+            </h4>
+        </div>
+    </div>
+    <div class="col-sm-6 text-center">
+            <img class="img-fluid img-responsive"
+                 id="block-three-img" src="{% static 'EMS_REST_API/websitephotos/reports.png' %}">
+    </div>
+</div>
+    <br><br>
+</div>
+</div>
+
+    <br><br><br>
+<div class="card container bg-transparent team-header">
+<div class="card-header bg-transparent">
+    <h1 class="text-center">My Awesome Team</h1>
+</div>
+<div class="container card-body">
+<div class="row">
+    <div class="col-sm-4 text-center">
+        <h4>Fucked Up UI/UX Designer</h4><br>
+        <img class="my-handsome-self-img circular--square" src="{% static 'EMS_REST_API/websitephotos/cedie3.jpeg' %}">
+        <br><br>
+        <h5>Cedrick Domingo</h5>
+        <p>
+          He thinks that Fancy GUIs are for gays, not needed indeed.
+            He loves bootstrap because he is so fucked up without it.
+            He does less than 15% of the project.
+        </p><br>
+    </div>
+
+    <div class="col-sm-4 text-center">
+        <h4>Programmer/Developer</h4><br>
+        <img class="my-handsome-self-img  circular--square" src="{% static 'EMS_REST_API/websitephotos/cedie1.jpg' %}">
+        <br><br>
+        <h5>Cedrick Domingo</h5>
+        <p>
+          He hates PHP and anything that is made by Microshit(Microsoft). He doesn't like
+            going with what is on mainstream.
+            . 10 cups is his daily dosage of coffee. He is the one to blame if everything fails.
+        </p><br>
+    </div>
+
+    <div class="col-sm-4 text-center">
+        <h4>The Mastermind</h4><br>
+        <img class="my-handsome-self-img circular--square" src="{% static 'EMS_REST_API/websitephotos/cedie2.jpg' %}">
+        <br><br>
+        <h5>Cedrick Domingo</h5>
+        <p>
+          He thinks that he is the boss. He pulls the strings from behind in every project. He has the 70% of income.
+            He always fuck-swear the clients for being idiots.
+        </p><br>
+    </div>
+</div>
+</div>
+</div>
+
+
+{#  footer  #}
+<footer class="footer">
+<div class="container">
+    <div class="row footer-content">
+        <div class="col-lg-8">
+            <h6 class="text-white"><i class="fa fa-phone"></i>&nbsp;contact us</h6>
+            <h6 class="text-secondary"><i class="fa fa-mobile-phone"></i>&nbsp;093403294023</h6>
+            <h6 class="text-secondary"><i class="fa fa-envelope"></i>&nbsp;school_email@gmail.com</h6>
+            <h6 class="text-secondary">
+                <i class="fa fa-address-card"></i>&nbsp;school_address, street 101, fucking shit</h6><br>
+        </div>
+        <div class="col-lg-4">
+
+            <a href="https://web.facebook.com/cedrick.domingo.75">
+                <h6 class="text-secondary btn-link"><i class="fa fa-facebook-official text-blue">
+                </i>&nbsp;facebook.com/cedrick.domingo.75</h6></a>
+            <a href="#">
+                <h6 class="text-secondary btn-link"><i class="fa fa-info text-secondary">
+                </i>&nbsp;Privacy Policy</h6></a>
+            <h6 class="text-orange"><i class="fa fa-copyright"></i>
+                copyrights reserved {% now 'Y' %}</h6>
+
+            <br>
+        </div>
+    </div>
+</div>
+</footer>
+
+
+<div id="cookieConsent">
+    <div id="closeCookieConsent">x</div>
+    This website is using cookies because it will not work without them.
+    If you don't understand what I am talking about, just click accept.<a class="cookieConsentOK">Accept</a>
+</div>
+
+
+{% endblock %}

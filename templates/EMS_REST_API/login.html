@@ -1,0 +1,67 @@
+{% extends 'EMS_REST_API/frameA.html' %}
+    {% load static %}
+
+{% block content %}
+{# Nav Bar #}
+<nav id="MagicMenu" class="navlogin navbar fixed-top navbar-expand-sm">
+
+        <a href="{% url 'emswebext' %}"><h4 class="navbar-brand text-orange">
+            <i class="fa fa-clock-o"></i>&nbsp;EMS WEBEXT</h4></a>
+</nav>
+
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-form-title"
+                     style="background-image: url({% static 'EMS_REST_API/Login_v15/images/bg-01.jpg' %});">
+					<span class="login100-form-title-1">
+						User Sign-In
+					</span>
+				</div>
+
+				<form class="login100-form validate-form" method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    {% if error %}
+                        <script>
+                            document.write('<div class="alert alert-danger">{{ error }}</div>');
+                        </script>
+                    {% endif %}
+					<div class="wrap-input100 validate-input m-b-26" data-validate="Username is required">
+						<span class="label-input100">Username</span>
+                        {# user input here #}
+						<input class="input100" type="text" name="username" placeholder="Enter username">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input m-b-18" data-validate = "Password is required">
+						<span class="label-input100">Password</span>
+                        {# password input here #}
+						<input class="input100" type="password" name="password" placeholder="Enter password">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="flex-sb-m w-full p-b-30">
+						<div class="contact100-form-checkbox">
+							<input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
+							<label class="label-checkbox100" for="ckb1">
+								Remember me
+							</label>
+						</div>
+
+						<div>
+							<a href="{% url 'password_reset' %}" class="txt1">
+                                Forgot Password?
+							</a>
+						</div>
+					</div>
+
+					<div class="container-login100-form-btn">
+						<button type="submit" class="login100-form-btn">
+							Login
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+{% endblock %}

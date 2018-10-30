@@ -1,0 +1,153 @@
+{% extends 'EMS_REST_API/mainframe.html' %}
+
+{% block navaddons %}
+{% if employee_object.is_admin %}
+    {% include 'EMS_REST_API/adminnavaddons.html' %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% load staticfiles %}
+
+{% if employee_object.is_admin %}
+
+    <div class="card mb-3">
+           <div class="card-header bg-dark text-info"><h4>
+              <i class="fas fa-cogs"></i>&nbsp;
+              Global Configurations</h4></div>
+        <div class="card-body">
+        <form method="post" action="{% url 'configUpdateWebsite' %}">
+        {% csrf_token %}
+            {% if config %}
+                <div class="row">
+
+                <div class="col-sm-6">
+
+                <h5><b>Cut-Offs:</b><br>
+                 <select class="form-control-sm" name="cutoff">
+                     {% if config.first_cutoff == 5 %}
+                         <option value="5" selected>5th and 20th day of the month</option>
+                         <option value="10">10th and 25th day of the month</option>
+                         <option value="15">15th and 30th day of the month</option>
+                     {% elif config.first_cutoff == 10 %}
+                         <option value="5">5th and 20th day of the month</option>
+                         <option value="10" selected>10th and 25th day of the month</option>
+                         <option value="15">15th and 30th day of the month</option>
+                     {% elif config.first_cutoff == 15 %}
+                         <option value="5" >5th and 20th day of the month</option>
+                         <option value="10">10th and 25th day of the month</option>
+                         <option value="15"selected>15th and 30th day of the month</option>
+                     {% endif %}
+                 </select>
+                </h5><br>
+
+                <h5><b>Level 1 Rate:</b><br>PHP
+                <input type="number" class="form-control-sm" name="level_1_rate" id="level_1_rate"
+                               value="{{ config.level_1_rate }}" required>
+                </h5><br>
+
+                <h5><b>Level 2 Rate:</b><br>PHP
+                <input type="number" class="form-control-sm" name="level_2_rate" id="level_2_rate"
+                               value="{{ config.level_2_rate }}" required>
+                </h5><br>
+
+                <h5><b>Level 3 Rate:</b><br>PHP
+                <input type="number" class="form-control-sm" name="level_3_rate" id="level_3_rate"
+                               value="{{ config.level_3_rate }}" required>
+                </h5><br>
+
+                <h5><b>Overtime Rate:</b><br>
+                <input type="number" class="form-control-sm" name="ot_rate" id="ot_rate"
+                               value="{{ config.overtime_rate }}" required>
+                </h5><br>
+                </div>
+
+                <div class="col-sm-6">
+
+                     <h5><b>SSS Payment:</b><br>
+                         {% if config.sss_pay_day == 5 or config.sss_pay_day == 10 or config.sss_pay_day == 15 %}
+                             <input type="radio" name="sss_pay" value="first" checked>firt cut-off<br>
+                             <input type="radio" name="sss_pay" value="second">second cut-off
+                         {% else %}
+                             <input type="radio" name="sss_pay" value="first">firt cut-off<br>
+                             <input type="radio" name="sss_pay" value="second" checked>second cut-off
+                         {% endif %}
+                    </h5><br>
+
+                    <h5><b>PHILHEALTH Payment:</b><br>
+  {% if config.philhealth_pay_day == 5 or config.philhealth_pay_day == 10 or config.philhealth_pay_day == 15 %}
+                             <input type="radio" name="philhealth_pay" value="first" checked>firt cut-off<br>
+                             <input type="radio" name="philhealth_pay" value="second">second cut-off
+                         {% else %}
+                             <input type="radio" name="philhealth_pay" value="first">firt cut-off<br>
+                             <input type="radio" name="philhealth_pay" value="second" checked>second cut-off
+                         {% endif %}
+                    </h5><br>
+
+                    <h5><b>PAGIBIG Payment:</b><br>
+  {% if config.pagibig_pay_day == 5 or config.pagibig_pay_day == 10 or config.pagibig_pay_day == 15 %}
+                             <input type="radio" name="pagibig_pay" value="first" checked>firt cut-off<br>
+                             <input type="radio" name="pagibig_pay" value="second">second cut-off
+                         {% else %}
+                             <input type="radio" name="pagibig_pay" value="first">firt cut-off<br>
+                             <input type="radio" name="pagibig_pay" value="second" checked>second cut-off
+                         {% endif %}
+                    </h5><br>
+
+                    <h5><b>Tax Payment:</b><br>
+                         {% if config.tax_pay_day == 5 or config.tax_pay_day == 10 or config.tax_pay_day == 15 %}
+                             <input type="radio" name="tax_pay" value="first" checked>firt cut-off<br>
+                             <input type="radio" name="tax_pay" value="second">second cut-off
+                         {% else %}
+                             <input type="radio" name="tax_pay" value="first">firt cut-off<br>
+                             <input type="radio" name="tax_pay" value="second" checked>second cut-off
+                         {% endif %}
+                    </h5><br>
+
+                    <h5><b>Operational Status:</b><br>
+                         {% if config.is_operating %}
+                             <input type="radio" name="is_operating" value="yes" checked>
+                             <span class="text-success">enabled</span><br>
+                             <input type="radio"  name="is_operating" value="no">
+                             <span class="text-danger">disabled</span>
+                         {% else %}
+                             <input type="radio" name="is_operating" value="yes">
+                             <span class="text-success">enabled</span><br>
+                             <input type="radio"  name="is_operating" value="no" checked>
+                             <span class="text-danger">disabled</span>
+                         {% endif %}
+                    </h5><br>
+
+                        <button type="reset" class="btn btn-info">Undo Changes</button>
+
+                        <button type="submit" class="btn btn-success">Update Configurations</button>
+
+                <br><br>
+                    {% if update_response %}
+                        {% if update_response == 'ok'%}
+                        <script>
+                            document.write('<div class="alert alert-success">Configurations are Updated</div>');
+                        </script>
+                        {% else %}
+                        <script>
+                            document.write('<div class="alert alert-danger">{{ update_response }}</div>');
+                        </script>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+
+                </div>
+
+            {% endif %}
+        </form>
+        </div>
+        <div class="card-footer bg-dark small text-info">Super-User View</div>
+    </div>
+
+{% else %}
+    {% include 'EMS_REST_API/error_404.html' %}
+{% endif %}
+
+
+{% endblock %}
