@@ -107,7 +107,7 @@ def attendance(request):
         if i.time_out is not None:
             time_out = i.time_out.astimezone(time_zone)
             time_out = str(time_out.strftime("%B %d, %Y %I:%M:%S %p"))
-        log_object = {'time_in': time_in, 'time_out': time_out}
+        log_object = {'idx': i.id, 'time_in': time_in, 'time_out': time_out}
         formatted_self_attendance.append(log_object)
 
     all_attendance = AttendanceLog.objects.all()
@@ -123,7 +123,7 @@ def attendance(request):
             time_out = str(time_out.strftime("%B %d, %Y %I:%M:%S %p"))
         gcc_id = convert_id(employee_object.id, str(employee_object.start_date)[:4])
         emp_name = '%s, %s %s' % (employee_object.last_name, employee_object.middle_name, employee_object.first_name)
-        log_object = {'time_in': time_in, 'time_out': time_out, 'name': emp_name, 'id': gcc_id}
+        log_object = {'idx': i.id, 'time_in': time_in, 'time_out': time_out, 'name': emp_name, 'id': gcc_id}
         formatted_all_attendance.append(log_object)
 
     context['attendance_logs'] = formatted_self_attendance
@@ -155,6 +155,7 @@ def salary(request):
             status = 'Released'
 
         log = {
+            'idx': i.id,
             'total_time': i.total_time,
             'total_ot': i.total_over_time,
             'days_present': i.days_present,
@@ -196,6 +197,7 @@ def salary(request):
             status = 'Released'
 
         log = {
+            'idx': i.id,
             'gcc_id': gcc_id,
             'emp_name': emp_name,
             'total_time': i.total_time,

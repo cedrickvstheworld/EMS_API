@@ -22,6 +22,9 @@ import time
 import threading
 from dateutil.parser import parse
 import pytz
+from . smsnotif import send_sms
+from threading import Thread
+from functools import partial
 
 # Create your views here.
 
@@ -102,7 +105,7 @@ def get_weekday(cur_datetime):
 
 
 def get_datetimePH():
-    t =  datetime.now(timezone('Asia/Manila')).strftime('%Y-%m-%d %H:%M:%S')
+    t = datetime.now(timezone('Asia/Manila')).strftime('%Y-%m-%d %H:%M:%S')
     return t
 
 
@@ -117,6 +120,37 @@ def auto_clock_out():
         employee_object.save()
         update_salary(i.time_out, i.time_in, employee_object)
     print('auto clock-out check done')
+
+
+def send_multiple_sms(object_list):
+    for i in object_list:
+        send_sms(i['msg'], i['contact'])
+
+
+def send_multiple_sms_thread(object_list):
+    threadx = Thread(target=partial(send_multiple_sms, object_list))
+    threadx.start()
+
+
+def notify_salary_release():
+    employee_objects = Employee.objects.all()
+    object_list = []
+    for i in employee_objects:
+        profile = EmployeeProfile.objects.get(user=i)
+
+        salary = SalaryReport.objects.filter(user=i).last()
+
+        name = "%s %s %s" % (i.first_name, i.middle_name, i.last_name)
+
+        msg_object = {
+            'msg': 'Hi there ' + name + '. Your salary report was release with the net pay of PHP '
+                   + str(salary.net_pay) + '.\n For more details, please check it on your EMS WebExt account.',
+            'contact': profile.contact_number
+        }
+
+        object_list.append(msg_object)
+
+    send_multiple_sms_thread(object_list)
 
 
 def update_salary(time_out, time_in, employee_object):
@@ -203,6 +237,7 @@ def release_salary(date_time):
             i.period = period
             i.is_released = True
             i.save()
+            # notify_salary_release()
     print('salary release check done')
 
 
@@ -254,8 +289,6 @@ def overtime_check():
         employee_salary.save()
 
     print('overtime check done')
-
-
 
 
 def check_attendance_status():
