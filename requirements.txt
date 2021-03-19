@@ -15,7 +15,7 @@ django-filters==0.2.1
 django-password-validation==0.1.1
 django-permissions==1.2.2
 django-rest-framework==0.1.0
-djangorestframework==3.9.0
+djangorestframework==3.11.2
 dlib==19.16.0
 face-recognition==1.2.3
 face-recognition-models==0.3.0
